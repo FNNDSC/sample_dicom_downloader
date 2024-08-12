@@ -1,10 +1,7 @@
 # Setup
 # ----------------------------------------------------------------------------------------------------
 
-DATA = $(PWD)/data
-BIN = $(PWD)/bin
-PATH  := $(BIN):$(PATH)
-SHELL := env PATH=$(PATH) /bin/bash
+DATA = ./data
 
 # Dataset download directories
 # ----------------------------------------------------------------------------------------------------
@@ -15,11 +12,6 @@ FNNDSC_SAG_ANON = $(DATA)/FNNDSC-SAG-anon-3d6e850
 
 UPMC_BREAST_TOMOGRAPHY = $(DATA)/upmc_breast_tomography
 REMIND = $(DATA)/ReMIND_BRAIN_MR
-
-# Downloader programs
-# ----------------------------------------------------------------------------------------------------
-
-S5CMD = $(BIN)/s5cmd
 
 # Make command aliases
 # ----------------------------------------------------------------------------------------------------
@@ -35,7 +27,6 @@ remind: $(REMIND)
 
 clean:
 	$(RM) -r $(DATA)
-	$(RM) -r $(BIN)/*
 
 .PHONY: all neuro clean upmc remind
 
@@ -64,13 +55,7 @@ $(UPMC_BREAST_TOMOGRAPHY):
 
 # https://doi.org/10.7937/3RAG-D070
 # Brain MR from the ReMIND dataset
-$(REMIND): $(S5CMD)
+$(REMIND):
 	mkdir "$@"
 	$(eval $@_TMP := $(shell realpath s3manifests/ReMIND_BRAIN_MR/gcs.s5cmd))
 	cd "$@" && s5cmd --no-sign-request --endpoint-url https://storage.googleapis.com run "$($@_TMP)"
-
-# Binary installers
-# ----------------------------------------------------------------------------------------------------
-
-$(S5CMD):
-	curl -sSfL "https://github.com/peak/s5cmd/releases/download/v2.2.2/s5cmd_2.2.2_`uname`-64bit.tar.gz" | tar xz --directory=bin s5cmd

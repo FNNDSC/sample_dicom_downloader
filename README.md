@@ -1,8 +1,34 @@
 # Sample Public DICOM Dataset Downloader
 
-Here, a simple all-in-one Makefile is provided for downloading a variety of permissively-licensed, publicly-available DICOM data.
+Here, a simple Makefile (and Dockerfile) is provided for downloading a variety of permissively-licensed, publicly-available DICOM data.
 
-The only requirements are `make`, `curl`, `tar`, and `bash`.
+## Dependencies
+
+- `tar`: typically pre-installed on Linux and MacOS
+- `curl`: https://curl.se
+- `make`: https://www.gnu.org/software/make/
+- `parallel`: https://www.gnu.org/software/parallel/
+- `s5cmd`: https://github.com/peak/s5cmd
+
+Alternatively, use Docker or Podman:
+
+```shell
+# using docker
+docker build -t localhost/fnndsc/sample-dicom-downloader:latest .
+
+# using podman
+podman build -t localhost/fnndsc/sample-dicom-downloader:latest .
+```
+
+Run `make` as:
+
+```shell
+# using docker
+docker run --rm -u "$(id -u):$(ig -g)" -v "$PWD:/app" -w /app localhost/fnndsc/sample-dicom-downloader:latest make
+
+# using podman
+podman run --rm --userns=host -v "$PWD:/app" -w /app localhost/fnndsc/sample-dicom-downloader:latest make
+```
 
 ## Usage
 
