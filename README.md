@@ -10,24 +10,16 @@ Here, a simple Makefile (and Dockerfile) is provided for downloading a variety o
 - `parallel`: https://www.gnu.org/software/parallel/
 - `s5cmd`: https://github.com/peak/s5cmd
 
-Alternatively, use Docker or Podman:
-
-```shell
-# using docker
-docker build -t localhost/fnndsc/sample-dicom-downloader:latest .
-
-# using podman
-podman build -t localhost/fnndsc/sample-dicom-downloader:latest .
-```
+Alternatively, use the container image `ghcr.io/fnndsc/utils:fc56615` which contains all of the above pre-installed.
 
 Run `make` as:
 
 ```shell
 # using docker
-docker run --rm -u "$(id -u):$(ig -g)" -v "$PWD:/app" -w /app localhost/fnndsc/sample-dicom-downloader:latest make
+docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/app" -w /app ghcr.io/fnndsc/utils:fc56615 make
 
 # using podman
-podman run --rm --userns=host -v "$PWD:/app" -w /app localhost/fnndsc/sample-dicom-downloader:latest make
+podman run --rm --userns=host -v "$PWD:/app" -w /app ghcr.io/fnndsc/utils:fc56615 make
 ```
 
 ## Usage
